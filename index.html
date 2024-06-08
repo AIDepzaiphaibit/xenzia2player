@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Snake Game</title>
+  <style>
+    #snake, #snake2 {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: green;
+      border-radius: 50%;
+    }
+    #food {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <div id="snake" style="top: 0px; left: 0px;"></div>
+  <div id="snake2" style="top: 200px; left: 200px;"></div>
+  <div id="food" style="top: 100px; left: 100px;"></div>
+  <p id="score">Score: 0</p>
+  
+  <script>
+    let snake = [];
+    let snake2 = [];
+    let food;
+    let direction = 'right';
+    let direction2 = 'right';
+    let score = 0;
+    
+    // Initialize the game
+    function initGame() {
+      snake = [{ x: 0, y: 0 }];
+      snake2 = [{ x: 10, y: 10 }];
+      food = { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) };
+      document.getElementById('food').style.top = `${food.y * 20}px`;
+      document.getElementById('food').style.left = `${food.x * 20}px`;
+    }
+    
+    // Update the game
+    function updateGame() {
+      let head = snake[0];
+      let newHead;
+      switch (direction) {
+        case 'right':
+          newHead = { x: head.x + 1, y: head.y };
+          break;
+        case 'left':
+          newHead = { x: head.x - 1, y: head.y };
+          break;
+        case 'up':
+          newHead = { x: head.x, y: head.y - 1 };
+          break;
+        case 'down':
+          newHead = { x: head.x, y: head.y + 1 };
+          break;
+      }
+      snake.unshift(newHead);
+      
+      let head2 = snake2[0];
+      let newHead2;
+      switch (direction2) {
+        case 'right':
+          newHead2 = { x: head2.x + 1, y: head2.y };
+          break;
+        case 'left':
+          newHead2 = { x: head2.x - 1, y: head2.y };
+          break;
+        case 'up':
+          newHead2 = { x: head2.x, y: head2.y - 1 };
+          break;
+        case 'down':
+          newHead2 = { x: head2.x, y: head2.y + 1 };
+          break;
+      }
+      snake2.unshift(newHead2);
+      
+      if (snake[0].x === food.x && snake[0].y === food.y) {
+        score++;
+        // Increase the size of the food element
+        let foodElement = document.getElementById('food');
+        foodElement.style.width = `${foodElement.offsetWidth + 10}px`;
+        foodElement.style.height = `${foodElement.offsetHeight + 10}px`;
+        food = { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) };
+      } else {
+        snake.pop();
+      }
+      
+      if (snake2[0].x === food.x && snake2[0].y === food.y) {
+        score++;
+        // Increase the size of the food element
+        let foodElement = document.getElementById('food');
+        foodElement.style.width = `${foodElement.offsetWidth + 10}px`;
+        foodElement.style.height = `${foodElement.offsetHeight + 10}px`;
+        food = { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) };
+      } else {
+        snake2.pop();
+      }
+      
+      updateUI();
+    }
+    
+    // Update the UI
+    function updateUI() {
+      let snakeElement = document.getElementById('snake');
+      snakeElement.style.top = `${snake[0].y * 20}px`;
+      snakeElement.style.left = `${snake[0].x * 20}px`;
+      
+      let snake2Element = document.getElementById('snake2');
+      snake2Element.style.top = `${snake2[0].y * 20}px`;
+      snake2Element.style.left = `${snake2[0].x * 20}px`;
+      
+      document.getElementById('food').style.top = `${food.y * 20}px`;
+      document.getElementById('food').style.left = `${food.x * 20}px`;
+      document.getElementById('score').innerHTML = `Score: ${score}`;
+    }
+    
+    // Handle user input
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'd':
+          direction = 'right';
+          break;
+        case 'a':
+          direction = 'left';
+          break;
+        case 'w':
+          direction = 'up';
+          break;
+        case 's':
+          direction = 'down';
+          break;
+        case 'ArrowRight':
+          direction2 = 'right';
+          break;
+        case 'ArrowLeft':
+          direction2 = 'left';
+          break;
+        case 'ArrowUp':
+          direction2 = 'up';
+          break;
+        case 'ArrowDown':
+          direction2 = 'down';
+          break;
+      }
+    });
+    
+    initGame();
+    setInterval(updateGame, 100);
+  </script>
+</body>
+</html>
